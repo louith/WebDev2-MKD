@@ -9,7 +9,7 @@
     <%- include('partials/header') %>
     <ul>
       <% users.forEach(user => { %>
-      <li><%= user %></li>
+      <li><a href="/users/<%= user.id %>"><%= user.name %></a></li>
       <% }); %>
     </ul>
   </body>
