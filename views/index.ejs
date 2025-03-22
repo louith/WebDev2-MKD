@@ -2,10 +2,12 @@
 <html lang="en">
   <%- include('./partials/header') %>
   <body>
-    <h1>Posts</h1>
+    <h1 class="text-2xl bg-blue-700">Posts</h1>
     <ul>
       <% posts.forEach(post => { %>
-      <li><strong><%= post.title %></strong><br /><%= post.body %></li>
+      <li class="mb-8"><%= post['title'] %></li>
+      <br />
+      <li><%= post['body'] %></li>
       <% }) %>
     </ul>
     <%- include('./partials/footer') %>
