@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index</title>
-  </head>
+  <%- include('./partials/header') %>
   <body>
-    <%- include('partials/header') %>
+    <h1>Posts</h1>
     <ul>
-      <% users.forEach(user => { %>
-      <li><a href="/users/<%= user.id %>"><%= user.name %></a></li>
-      <% }); %>
+      <% posts.forEach(post => { %>
+      <li><strong><%= post.title %></strong><br /><%= post.body %></li>
+      <% }) %>
     </ul>
+    <%- include('./partials/footer') %>
   </body>
 </html>

@@ -1,5 +1,6 @@
 const { name } = require("ejs");
 const express = require("express");
+const axios = require("axios");
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", "./views");
@@ -7,14 +8,26 @@ app.use(express.static("public"));
 
 const port = 4000;
 
-const users = [
-  { id: 1, name: "Alex Johnson", age: 25, bio: "Loves coding!" },
-  { id: 2, name: "Samantha Lee", age: 30, bio: "Passionate about UI/UX!" },
-  { id: 3, name: "Chris Walker", age: 28, bio: "Backend enthusiast!" },
-];
+app.get("/", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    res.render("index", { posts: response.data });
+  } catch (error) {
+    res.status(500).send("Error fetching data");
+  }
+});
 
-app.get("/", (req, res) => {
-  res.render("home", { users });
+app.get("/posts", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    res.render("index", { posts: response.data });
+  } catch (error) {
+    res.status(500).send("Error fetching data");
+  }
 });
 
 // app.get("/users", (req, res) => {
@@ -30,7 +43,7 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-const postRouter = require("./routes/posts");
-app.use("/posts", postRouter);
+// const postRouter = require("./routes/posts");
+// app.use("/posts", postRouter);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
