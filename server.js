@@ -31,7 +31,11 @@ app.get("/:id", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 // const postRouter = require("./routes/posts");
 // app.use("/posts", postRouter);
 
-app.listen(port, () => console.log(`Server running on port ${S}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
