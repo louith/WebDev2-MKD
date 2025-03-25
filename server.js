@@ -19,31 +19,19 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/posts", async (req, res) => {
+app.get("/:id", async (req, res) => {
   try {
+    const postId = req.params.id;
     const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/posts"
+      `https://jsonplaceholder.typicode.com/posts/${postId}`
     );
-    res.render("index", { posts: response.data });
+    res.render("post", { post: response.data });
   } catch (error) {
-    res.status(500).send("Error fetching data");
+    res.status(500).send("Error fetching post details");
   }
 });
-
-// app.get("/users", (req, res) => {
-//   res.render("index", { users });
-// });
-
-// app.get("/users/:id", (req, res) => {
-//   const user = users.find((u) => u.id === parseInt(req.params.id));
-//   if (user) {
-//     res.render("profile", { user });
-//   } else {
-//     res.status(404).send("User not found");
-//   }
-// });
 
 // const postRouter = require("./routes/posts");
 // app.use("/posts", postRouter);
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.log(`Server running on port ${S}`));
