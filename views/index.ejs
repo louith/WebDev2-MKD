@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/header') %>
-  <body>
-    <h1 class="text-4xl mx-auto mt-4">Posts</h1>
-    <!-- <ul>
-      <% posts.forEach(post => { %>
-      <li class="mb-10">
-        <strong><a href="/post/<%= post.id %>"><%= post.title %></a></strong>
-        <br /><%= post.body %>
-      </li>
-      <% }) %>
-    </ul> -->
-    <div class="grid grid-cols-3 gap-4">
-      <% posts.forEach(post => { %>
-      <a
-        href="/<%= post.id %>"
-        class="my-4 block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+  <%- include('./partials/header', {title: 'Pokedex - Home'}) %>
+  <body class="flex flex-col bg-amber-400">
+    <div class="flex flex-col bg-amber-400 min-h-screen w-full items-center">
+      <h1
+        class="text-5xl mx-auto pb-4 pt-10"
+        style="font-family: 'Bungee Tint', cursive"
       >
-        <h5
-          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+        Pokedex
+      </h1>
+      <div class="grid grid-cols-3 gap-4 mx-auto mt-4">
+        <% pokemonList.forEach(pokemon => { %>
+        <div
+          class="flex flex-col justify-center items-center mx-auto min-w-50 bg-white border border-gray-200 rounded-lg drop-shadow-lg hover:bg-red-200 hover:scale-105 transition-transform duration-300 ease-in-out"
         >
-          <%= post.title %>
-        </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">
-          <%= post.body %>
-        </p>
-      </a>
-      <% }) %>
+          <a href="<%= pokemon.url %>">
+            <img
+              class="rounded-t-lg"
+              src="<%= pokemon.image %>"
+              alt="<%= pokemon.name %>"
+            />
+          </a>
+          <div class="p-5">
+            <a href="<%= pokemon.url %>">
+              <h5
+                class="capitalize mb-2 text-xl font-bold tracking-tight text-orange-800"
+                style="font-family: 'Tektur', sans-serif"
+              >
+                <%= pokemon.name %>
+              </h5>
+            </a>
+          </div>
+        </div>
+        <% }); %>
+      </div>
     </div>
-    <br />
     <%- include('./partials/footer') %>
   </body>
 </html>
