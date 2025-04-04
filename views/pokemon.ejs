@@ -3,24 +3,26 @@
   <%- include('./partials/header', {title: `Pokedex -
   ${pokemon.name.toUpperCase()}`}) %>
   <body>
-    <div class="bg-amber-400 flex flex-col min-h-screen w-full">
+    <div
+      class="bg-amber-400 flex flex-col min-h-screen w-full overflow-x-hidden"
+    >
       <img
         src="<%= pokemon.image %>"
         alt="<%= pokemon.name %>"
         class="mx-auto mt-10 max-w-[250px]"
       />
       <h1
-        class="text-4xl font-bold mt-5 mb-8 text-center"
+        class="text-4xl font-bold mt-5 mb-3 text-center"
         style="font-family: 'Bungee Tint', cursive"
       >
         <%= pokemon.name.toUpperCase() %>
       </h1>
-      <!-- <p
+      <p
         class="text-gray-700 italic mt-2 self-center text-xs whitespace-normal pb-5"
         style="font-family: 'Tektur', sans-serif"
       >
         "<%= pokemon.description %>"
-      </p> -->
+      </p>
 
       <div
         class="flex flex-row mt-2 w-screen items-start justify-center text-sm"
