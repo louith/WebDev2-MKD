@@ -35,7 +35,7 @@ app.get("/users/:id", (req, res) => {
 //create new user
 app.post("/users", (req, res) => {
   const newUser = {
-    id: Date.now(),
+    id: req.body.id,
     name: req.body.name,
   };
   // Normally, you would save this user to a database
