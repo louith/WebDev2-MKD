@@ -1,72 +1,62 @@
 const express = require("express");
-const axios = require("axios");
-const { name } = require("ejs");
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-//set EJS as the templating engine
+// Middleware
+app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(express.json()); // Middleware to parse JSON bodies
 
-const users = [
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Anne Klutz" },
-  { id: 3, name: "Hi" },
+// Temporary in-memory "database"
+let users = [
+  { id: 1, name: "Alice", email: "alice@example.com" },
+  { id: 2, name: "Bob", email: "bob@example.com" },
 ];
 
-app.get("/", (req, res) => {
-  res.send("Homepage");
-});
+// ROUTES
 
+// GET: All users
 app.get("/users", (req, res) => {
-  res.json(users);
+  res.render("index", { users });
 });
 
-app.get("/users/:id", (req, res) => {
-  const user = users.find((u) => u.id === parseInt(req.params.id));
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).send("User not found");
-  }
+// GET: New user form
+app.get("/users/new", (req, res) => {
+  res.render("new");
 });
 
-//create new user
+// POST: Create new user
 app.post("/users", (req, res) => {
-  const newUser = {
-    id: req.body.id,
-    name: req.body.name,
-  };
-  // Normally, you would save this user to a database
+  const { name, email } = req.body;
+  const newUser = { id: Date.now(), name, email };
   users.push(newUser);
-  // For this example, we'll just push it to the array
-  res.status(201).json(newUser);
+  res.redirect("/users");
 });
 
-//update
-app.put("/users/:id", (req, res) => {
-  const user = users.find((u) => u.id === parseInt(req.params.id));
+// GET: Edit user form
+app.get("/users/:id/edit", (req, res) => {
+  const user = users.find((u) => u.id == req.params.id);
+  res.render("edit", { user });
+});
+
+// POST: Update user
+app.post("/users/:id", (req, res) => {
+  const { name, email } = req.body;
+  const user = users.find((u) => u.id == req.params.id);
   if (user) {
-    user.id = req.body.id; // Update the user ID (if needed)
-    user.name = req.body.name;
-    res.json(user);
-  } else {
-    res.status(404).send("User not found");
+    user.name = name;
+    user.email = email;
   }
+  res.redirect("/users");
 });
 
-app.delete("/users/:id", (req, res) => {
-  const userIndex = users.findIndex((u) => u.id === parseInt(req.params.id));
-  if (userIndex !== -1) {
-    users.splice(userIndex, 1); // Remove the user from the array
-    res.send("User deleted");
-  } else {
-    res.status(404).send("User not found");
-  }
+// POST: Delete user
+app.post("/users/:id/delete", (req, res) => {
+  users = users.filter((u) => u.id != req.params.id);
+  res.redirect("/users");
 });
 
-// const postRouter = require("./routes/posts");
-// app.use("/posts", postRouter);
-
-app.listen(port, () => console.log(`Server running on port ${port}`));
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
