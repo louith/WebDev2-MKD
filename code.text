@@ -1,0 +1,72 @@
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Database = require('better-sqlite3');
+
+const app = express();
+const db = new Database('users.db');
+const SECRET_KEY = 'your-secret-key';
+
+app.use(express.json());
+
+// Create table if it doesn't exist
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE,
+    password TEXT
+  )
+`).run();
+
+// Register
+app.post('/register', async (req, res) => {
+  const { email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+
+  try {
+    db.prepare('INSERT INTO users (email, password) VALUES (?, ?)').run(email, hashed);
+    res.json({ message: 'User registered successfully' });
+  } catch (err) {
+    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      res.status(400).json({ message: 'Email already registered' });
+    } else {
+      res.status(500).json({ message: 'Server error' });
+    }
+  }
+});
+
+// Login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+
+  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(401).json({ message: 'Invalid credentials' });
+
+  const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+  res.json({ token });
+});
+
+// Middleware
+function authenticate(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) return res.sendStatus(401);
+  const token = header.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.sendStatus(403);
+  }
+}
+
+// Protected route
+app.get('/dashboard', authenticate, (req, res) => {
+  res.json({ message: `Welcome, ${req.user.email}` });
+});
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));

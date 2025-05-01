@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include('partials/header') %>
+  <body>
+    <h2>Welcome, <%= user.email %>!</h2>
+    <p>You are successfully logged in.</p>
+    <form action="/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  </body>
+</html>
