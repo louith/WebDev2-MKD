@@ -5,7 +5,7 @@ const db = require("../db");
 const SECRET_KEY = "your-secret-key";
 
 exports.showRegisterForm = (req, res) => {
-  res.render("register", { title: "Register" });
+  res.render("register");
 };
 
 exports.register = async (req, res) => {
@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
 };
 
 exports.showLoginForm = (req, res) => {
-  res.render("login", { title: "Login" });
+  res.render("login");
 };
 
 exports.login = async (req, res) => {
@@ -56,5 +56,5 @@ exports.authenticate = (req, res, next) => {
 };
 
 exports.dashboard = (req, res) => {
-  res.render("dashboard", { user: req.user, title: "Dashboard" });
+  res.render("dashboard", { user: req.user });
 };

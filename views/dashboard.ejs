@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <% include('partials/header') %>
+  <%- include('./partials/header', {title: 'Dashboard'}) %>
   <body>
     <h2>Welcome, <%= user.email %>!</h2>
     <p>You are successfully logged in.</p>
